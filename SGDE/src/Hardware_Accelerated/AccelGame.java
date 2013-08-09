@@ -5,9 +5,6 @@
 package Hardware_Accelerated;
 
 import java.awt.Canvas;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.image.BufferStrategy;
 import javax.swing.JFrame;
 
 /**
@@ -32,7 +29,7 @@ public class AccelGame {
     
     public AccelGame(AGame game, String title){
         this.game=game;
-        frame= new JFrame();
+        frame= new JFrame(title);
         gui= new Canvas();
         frame.setSize(game.GAME_WIDTH, game.GAME_HEIGHT);
         frame.add(gui);

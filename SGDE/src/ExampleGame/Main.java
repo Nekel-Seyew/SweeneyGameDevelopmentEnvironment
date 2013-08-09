@@ -5,7 +5,6 @@
 
 package ExampleGame;
 
-import Game.GameBase;
 import Hardware_Accelerated.AccelGame;
 
 /**

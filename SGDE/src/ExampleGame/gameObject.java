@@ -50,19 +50,19 @@ public class gameObject {
                 (int) pos.getY() - sprite.getHeight() / 2,
                 sprite.getWidth(),
                 sprite.getHeight(),0f);
-//        for(gameObject p : s){
-//            if(this.boundingRect.intersects(p.boundingRect) && this!=p){
-//                if(p.pos.getX()>this.pos.getX()){
-//                    this.velocity.setX(this.velocity.getX()*-1);
-//                }else if(p.pos.getX()<this.pos.getX()){
-//                    this.velocity.setX(this.velocity.getX()*-1);
-//                }else if(p.pos.getY()>this.pos.getY()){
-//                    this.velocity.setY(this.velocity.getY()*-1);
-//                }else if(p.pos.getY()<this.pos.getY()){
-//                    this.velocity.setY(this.velocity.getY()*-1);
-//                }
-//            }
-//        }
+        for(gameObject p : s){
+            if(this.boundingRect.intersects(p.boundingRect) && this!=p){
+                if(p.pos.getX()>this.pos.getX()){
+                    this.velocity.setX(this.velocity.getX()*-1);
+                }else if(p.pos.getX()<this.pos.getX()){
+                    this.velocity.setX(this.velocity.getX()*-1);
+                }else if(p.pos.getY()>this.pos.getY()){
+                    this.velocity.setY(this.velocity.getY()*-1);
+                }else if(p.pos.getY()<this.pos.getY()){
+                    this.velocity.setY(this.velocity.getY()*-1);
+                }
+            }
+        }
         pos.add(velocity);
     }
 }

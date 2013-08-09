@@ -206,8 +206,12 @@ public class AMath {
     
     private static double dist(int dx, int dy){
         int max, min, approx;
-        if(dx<0) dx=-dx;
-        if(dy<0) dy=-dy;
+        if(dx<0){
+            dx=-dx;
+        }
+        if(dy<0){
+            dy=-dy;
+        }
         
         if( dx < dy ){
             min=dx;
