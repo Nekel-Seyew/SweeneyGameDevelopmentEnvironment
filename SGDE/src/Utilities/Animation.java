@@ -224,6 +224,47 @@ public class Animation implements Serializable{
             }
         }
     }
+    
+    public void Draw(ImageCollection b, float angle, Vector2 pos, float scaleX, float scaleY, int depth, Rect drawnArea){
+        if (stripAnimation) {
+            long t = System.currentTimeMillis();
+            int height = cells[0].getHeight();
+            int width = cells[0].getWidth();
+            if (t - time >= rate) {
+                if (counter >= width / height) {
+                    counter = 0;
+                }
+                b.Draw(cells[0], position, angle, scaleX, scaleY, new Rectangle(counter * height, 0, width, height), depth);
+                counter++;
+                time = t;
+            } else {
+                b.Draw(cells[0], position, angle, scaleX, scaleY, new Rectangle(counter * height, 0, width, height), depth);
+            }
+        } else {
+            if (cells.length == 1) {
+                b.Draw(cells[0], position, angle, scaleX, scaleY, drawnArea, depth);
+                return;
+            }
+            long t = System.currentTimeMillis();
+            try {
+                if (t - time >= rate) {
+                    if (counter >= cells.length) {
+                        counter = 0;
+                    }
+                    b.Draw(cells[counter++], position, angle, scaleX, scaleY, drawnArea, depth);
+                    time = t;
+                } else {
+                    b.Draw(cells[counter], position, angle, scaleX, scaleY, drawnArea, depth);
+                }
+            } catch (Exception e) {
+                if (e instanceof ArrayIndexOutOfBoundsException) {
+                    counter = 0;
+                    time = t;
+                    b.Draw(cells[counter], position, angle, scaleX, scaleY, drawnArea, depth);
+                }
+            }
+        }
+    }
 
     public void Draw(ImageCollection b, float angle, Rectangle drawnArea, float scaleX, float scaleY) {
         if (stripAnimation) {
