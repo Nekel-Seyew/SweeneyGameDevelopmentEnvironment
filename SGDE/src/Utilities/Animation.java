@@ -226,6 +226,7 @@ public class Animation implements Serializable{
     }
     
     public void Draw(ImageCollection b, float angle, Vector2 pos, float scaleX, float scaleY, int depth, Rect drawnArea){
+        this.position=new Vector2(pos);
         if (stripAnimation) {
             long t = System.currentTimeMillis();
             int height = cells[0].getHeight();
