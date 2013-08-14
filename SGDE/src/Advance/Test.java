@@ -82,13 +82,16 @@ public class Test {
 //        System.out.println("AMath distance: Time: "+(System.nanoTime()-start)+" Result: "+res);
         
         exp[] e=new exp[100];
-        for(int i=0; i<e.length; i++){
-            e[i]=new exp((int)(Math.random()*1000));
-        }
-//        RadixSort.sort(e, 1000);
-        for(int i=0; i<e.length; i++){
-            System.out.print(e[i]+" ");
-        }
+//        for(int i=0; i<e.length; i++){
+//            e[i]=new exp((int)(Math.random()*1000));
+//        }
+////        RadixSort.sort(e, 1000);
+//        for(int i=0; i<e.length; i++){
+//            System.out.print(e[i]+" ");
+//        }
+        
+        Object hello=e;
+        System.out.println((hello instanceof exp[]));
     }
     
     public static class exp implements RadixSortable{

@@ -36,6 +36,7 @@ public class AccelGame {
         frame.setVisible(true);
         gui.createBufferStrategy(2);
         gameThread=new Thread(game);
+        gameThread.setPriority(Thread.MAX_PRIORITY);
         
         //adding listeners to the jframe
         frame.addKeyListener(game.getInputs());
