@@ -140,6 +140,8 @@ public class ExampleGame extends AGame implements UDPServerListener{
 
     @Override
     public void InitializeAndLoad() {
+        System.setProperty("sun.java2d.d3d","false");
+        System.setProperty("sun.java2d.opengl","True");
         player=new MyPlayer("Sprites/Wyvern.jpg", new Vector2(200,300), new Vector2(10,10));
         go=new gameObject(new Vector2(400,300));
         gos= new ArrayList<gameObject>();
