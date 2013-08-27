@@ -13,7 +13,11 @@ import javax.swing.JFrame;
  */
 public class AccelGame {
     static{
-        System.setProperty("sun.java2d.opengl","True");
+        if(System.getProperty("os.name").contains("Win")||System.getProperty("os.name").contains("win")){
+            System.setProperty("sun.java2d.d3d","True");
+        }else{
+            System.setProperty("sun.java2d.opengl","True");
+        }
     }
     //private static final int THREAD_DELAY=16;
     /**
