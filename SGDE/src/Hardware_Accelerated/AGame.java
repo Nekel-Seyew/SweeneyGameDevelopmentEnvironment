@@ -17,6 +17,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
 
 /**
  * A Hardware Accelerated game, much better than the normal Game Class.
@@ -141,6 +142,17 @@ public abstract class AGame implements Runnable{
         gfx.dispose();
         strategy.show();
     }
+    
+    public BufferedImage getGuiImage(){
+        BufferedImage img = new BufferedImage(AccelGame.gui.getWidth(), AccelGame.gui.getHeight(), BufferedImage.TYPE_INT_RGB);
+        Graphics2D g=img.createGraphics();
+        g.setColor(bgc);
+        g.fillRect(0,0,AccelGame.gui.getWidth(), AccelGame.gui.getHeight());
+        Draw(g,batch);
+        batch.Render(g, AccelGame.gui);
+        return img;
+    }
+    
     /**
      * Internal run function which makes the game run. IGNORE and DO NOT OVERRIDE.
      */

@@ -5,6 +5,7 @@
 package Hardware_Accelerated;
 
 import java.awt.Canvas;
+import java.awt.image.BufferedImage;
 import javax.swing.JFrame;
 
 /**

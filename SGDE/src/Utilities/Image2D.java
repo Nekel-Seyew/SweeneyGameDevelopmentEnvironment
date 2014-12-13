@@ -9,17 +9,15 @@ import Advance.RadixSortable;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
-import java.awt.image.BufferedImageOp;
 import java.awt.image.ImageObserver;
 import java.awt.image.ImageProducer;
+import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Hashtable;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 
 /*Copyright 2011 Kyle Dieter Sweeney
@@ -518,7 +516,14 @@ public class Image2D extends Image implements Serializable, RadixSortable{
         return this.depth;
     }
 
-
+    
+    public static void saveImage(RenderedImage img, String path) throws Exception{
+        if(!path.contains(".")){
+            throw new Exception("Doesn't contain a file type in path");
+        }
+        String type=path.substring(path.indexOf(".")+1);
+        System.out.println(ImageIO.write(img, type, new File(path)));
+    }
     
     
     private class Shading implements Serializable{

@@ -169,7 +169,28 @@ public class Vector2 implements Cloneable, Serializable{
     public double distance(Point p){
         return lengthMaker((X-p.x),(Y-p.y));
     }
-
+    
+    /**
+     * Calculates the square of the distance between this vector and another
+     * @param other the other vector to calculate the distance
+     * @return the distance squared
+     */
+    public double distanceSquare(Vector2 other){
+        double x = this.X - other.X;
+        double y = this.Y - other.Y;
+        return (x*x) + (y*y);
+    }
+    /**
+     * Calculates the square of the distance between this vector and a point
+     * @param p the other point to calculate the distance
+     * @return the distance squared
+     */
+    public double distanceSquare(Point p){
+        double x = this.X - p.x;
+        double y = this.Y - p.y;
+        return (x*x) + (y*y);
+    }
+    
     /**
      * adds the passed in vector's values to this vector's values
      * @param other the vector who's values will be added to this instance's variables

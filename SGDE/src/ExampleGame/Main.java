@@ -6,6 +6,7 @@
 package ExampleGame;
 
 import Hardware_Accelerated.AccelGame;
+import java.awt.Toolkit;
 
 /**
  *
@@ -16,6 +17,7 @@ public class Main {
         //GameBase gameWindow = new GameBase(new ExampleGame(), "ExampleGame");
         AccelGame gameWindow=new AccelGame(new ExampleGame(), "ExampleGame");
         gameWindow.run();
+        System.out.println(Toolkit.getDefaultToolkit().getScreenSize());
 //        Runtime run = Runtime.getRuntime();
 //        long memleft=run.totalMemory();
 //        while(true){

@@ -5,27 +5,24 @@
 
 package ExampleGame;
 
-import Game.Game;
 import Hardware_Accelerated.AGame;
 import Hardware_Accelerated.AccelGame;
 import Networking.UDP.NetworkThread;
-import Networking.PortIP;
 import Networking.UDP.UDPServerListener;
-import Networking.UDP.UDPClient;
-import Networking.UDP.UDPServer;
 import Utilities.Image2D;
 import Utilities.ImageCollection;
 import Utilities.Mouse;
 import Utilities.Rect;
 import Utilities.Vector2;
+import java.awt.AWTException;
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Robot;
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
@@ -53,6 +50,8 @@ public class ExampleGame extends AGame implements UDPServerListener{
     NetworkThread server;
     NetworkThread client;
     Image2D myGif;
+    
+    Robot robot;
 
     @Override
     public void Update(){
@@ -60,6 +59,9 @@ public class ExampleGame extends AGame implements UDPServerListener{
             AccelGame.frame.addKeyListener(new keyListener());
             AccelGame.gui.addKeyListener(new keyListener());
             first=false;
+            Toolkit tk=Toolkit.getDefaultToolkit();
+            AccelGame.gui.setCursor(tk.createCustomCursor(tk.createImage("Sprites/theDot.png"), new Point(AccelGame.gui.getX(),AccelGame.gui.getY()), "img"));
+            
         }
         
         //player.Update();
@@ -133,7 +135,7 @@ public class ExampleGame extends AGame implements UDPServerListener{
             t.Draw(batch);
         }
         
-        batch.Draw(myGif, new Vector2(200,200), 1000);
+//        batch.Draw(myGif, new Vector2(200,200), 1000);
         
         this.setBackgroundColor(Color.red);
     }
@@ -152,18 +154,22 @@ public class ExampleGame extends AGame implements UDPServerListener{
         }
         box=new Rect(100,100,500,100);
         pixel= new Image2D("Sprites/theDot.png");
+//        try {
+//            AudioStream as= new AudioStream(new FileInputStream("Sounds/Unreel.wav"));
+//            AudioPlayer.player.start(as);
+//        } catch (IOException ex) {
+//            Logger.getLogger(ExampleGame.class.getName()).log(Level.SEVERE, null, ex);
+//        }
         try {
-            AudioStream as= new AudioStream(new FileInputStream("Sounds/Unreel.wav"));
-            AudioPlayer.player.start(as);
-        } catch (IOException ex) {
+            robot= new Robot();
+    //        server = new NetworkThread(new UDPServer("192.168.0.11",4446),this, null, null);
+    //        client = new NetworkThread(new UDPClient("192.168.0.11",4446),this, null, this);
+    //        myGif=new Image2D("Sprites/mygif.gif");
+    //        server.start();
+    //        client.start();
+        } catch (AWTException ex) {
             Logger.getLogger(ExampleGame.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        server = new NetworkThread(new UDPServer("192.168.0.11",4446),this, null, null);
-        client = new NetworkThread(new UDPClient("192.168.0.11",4446),this, null, this);
-        myGif=new Image2D("Sprites/mygif.gif");
-//        server.start();
-//        client.start();
         
         
     }
@@ -205,9 +211,17 @@ public class ExampleGame extends AGame implements UDPServerListener{
 
         @Override
         public void keyPressed(KeyEvent e) {
-            System.out.println("EVENT");
-            if(e.getKeyChar()=='x'){
-                server.sendData("Data Sent!".getBytes());
+            if (e.getKeyCode() == KeyEvent.VK_I) {
+                System.out.println("EVENT!");
+                try {
+                    Image2D.saveImage(getGuiImage(), "Sprites/Test.png");
+                } catch (Exception ex) {
+                    Logger.getLogger(ExampleGame.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            if(e.getKeyCode()==KeyEvent.VK_M){
+                System.out.println(AccelGame.gui.getLocationOnScreen());
+                robot.mouseMove(300+(int)AccelGame.gui.getLocationOnScreen().getX(), 400+(int)AccelGame.gui.getLocationOnScreen().getY());
             }
         }
 

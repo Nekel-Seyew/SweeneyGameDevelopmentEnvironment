@@ -4,6 +4,8 @@
  */
 package Advance;
 
+import Utilities.Vector2;
+
 /**
  *
  * @author KyleSweeney
@@ -92,6 +94,11 @@ public class Test {
         
         Object hello=e;
         System.out.println((hello instanceof exp[]));
+        
+        Vector2 a = new Vector2(100,200);
+        Vector2 b = new Vector2(300,-400);
+        
+        System.out.println(a.distance(b));
     }
     
     public static class exp implements RadixSortable{

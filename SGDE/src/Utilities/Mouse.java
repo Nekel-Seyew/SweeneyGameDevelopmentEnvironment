@@ -5,9 +5,17 @@
 
 package Utilities;
 
+import java.awt.AWTException;
+import java.awt.Component;
+import java.awt.Point;
+import java.awt.Robot;
+import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JComponent;
 
 /*Copyright 2011 Kyle Dieter Sweeney
  * This file is part of the Sweeney Game Development Environment.
@@ -36,7 +44,13 @@ public class Mouse implements Cloneable,Serializable{
     private boolean[] buttons;
     private int mouseScroll;
     private static Mouse inst=new Mouse();
-
+    private Robot robot;
+    private boolean captureMouse;
+    private Vector2 center;
+    private Vector2 wh;
+    private double dx=0;
+    private double dy=0;
+    private Component gui;
 
     /**
      * Represents the Left Button for methods in this class.
@@ -61,7 +75,12 @@ public class Mouse implements Cloneable,Serializable{
         location=new Vector2();
         buttons=new boolean[3];
         mouseScroll=0;
-        
+        try {
+            robot=new Robot();
+        } catch (AWTException ex) {
+            Logger.getLogger(Mouse.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        captureMouse=false;
     }
 
     /**
@@ -149,6 +168,12 @@ public class Mouse implements Cloneable,Serializable{
      */
     public void mouseMoved(MouseEvent e){
         location=new Vector2(e.getX(),e.getY());
+        if(this.captureMouse){
+            dx=(location.getX()-center.getX())/wh.getX();
+            dy=(location.getY()-center.getY())/wh.getY();
+            robot.mouseMove((int)((center.getX()-location.getX())+gui.getLocationOnScreen().getX()),
+                    (int)((center.getY()-location.getY())+gui.getLocationOnScreen().getY()));
+        }
     }
 
     /**
@@ -176,11 +201,41 @@ public class Mouse implements Cloneable,Serializable{
     @Override
     public Mouse clone(){
         Mouse returningMouse = new Mouse();
-        returningMouse.buttons=this.buttons;
-        returningMouse.location=this.location;
+        returningMouse.buttons=this.buttons.clone();
+        returningMouse.location=this.location.clone();
         returningMouse.mouseScroll=this.mouseScroll;
+        returningMouse.captureMouse=this.captureMouse;
+        returningMouse.center=this.center.clone();
+        returningMouse.wh=this.wh.clone();
+        returningMouse.gui=this.gui;
         return returningMouse;
     }
+    
+    public void captureMouse(boolean set, Vector2 mouseCenter, Vector2 widthHeight, Component guiApp){
+        this.captureMouse=set;
+        this.center=mouseCenter;
+        this.wh=widthHeight;
+        this.gui=guiApp;
+    }
+    public void setCursorImage(String ImgPath, JComponent jc){
+        Toolkit.getDefaultToolkit().createCustomCursor(
+                Toolkit.getDefaultToolkit().createImage(ImgPath), 
+                new Point(jc.getX(), jc.getY()), "img");
+        
+        //done
+    }
+    
+    public double dx(){
+        double r=dx;
+        dx=0;
+        return r;
+    }
+    public double dy(){
+        double r=dy;
+        dy=0;
+        return r;
+    }
+    
     /**
      * Buttons the Mouse has. Left, Right, and Other
      */
