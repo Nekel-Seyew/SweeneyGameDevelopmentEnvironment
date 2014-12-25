@@ -7,6 +7,8 @@ package Utilities;
 import Advance.AMath;
 import Advance.RadixSortable;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -61,7 +63,6 @@ public class ImageCollection implements Serializable{
         this.v = v;
         bufferStart=new Node(null, 0, null);
         nodes= new ArrayList<Node>();
-        //buffer= new Image2D[1000];
     }
     
     public ImageCollection(ViewScreen v){
@@ -71,7 +72,6 @@ public class ImageCollection implements Serializable{
         this.v = v;
         bufferStart=new Node(null, 0, null);
         nodes= new ArrayList<Node>();
-        //buffer= new Image2D[1000];
     }
     
     private void addOne(Image2D hold, int depth, Vector2 position){
@@ -83,24 +83,6 @@ public class ImageCollection implements Serializable{
             largestSize=depth;
         }
     }
-    private void addTwo(Image2D hold, int depth, Vector2 position){
-        if(bufferStart.getNext()==null){
-            Node newNode=new Node(hold, depth, bufferStart);
-            bufferStart.setNext(newNode);
-        }
-        Node search = bufferStart.getNext();
-        while (search != null) {
-            if (search.depth > depth) {
-                Node newNode = new Node(hold, depth, search.getPrevious());
-                break;
-            } else if (search.getNext() == null) {
-                Node newNode = new Node(hold, depth, search);
-                break;
-            } else {
-                search = search.getNext();
-            }
-        }
-    }
     
     private void addThree(Image2D hold, int depth){
         nodes.add(new Node(hold, depth, null));
@@ -109,32 +91,8 @@ public class ImageCollection implements Serializable{
     private void addToColl(Image2D hold, int depth, Vector2 position){
         addOne(hold, depth, position);
         addThree(hold, depth);
-        
-//        addTwo(hold, depth, position);
-
-//        boolean searching = true;
-//        int place = 0;
-//        while (searching) {
-//            if (Batch.isEmpty()) {
-//                searching = false;
-//                Batch.add(hold);
-//            } else if (Batch.size() <= place) {
-//                searching = false;
-//                Batch.add(hold);
-//            } else if (Batch.get(place).getDepth() > depth) {
-//                Batch.add(place, hold);
-//                searching = false;
-//            } else {
-//                place++;
-//            }
-//        }
-        
-        
     }
     
-    private void add(int place, Image2D i){
-        
-    }
     /**
      * Draws an Image passed into it. Sets depth to 0. Useful if the user does not wish to use depth-sorting. The position passed in will be the center of the image.
      * @param i the Image2D to be drawn
@@ -220,6 +178,37 @@ public class ImageCollection implements Serializable{
         }
         i.giveShading(tint, percentTint);
         addToColl(i, depth, pos);
+    }
+    
+    public void Draw(BufferedImage i, Vector2 pos, int depth){
+        Command p = new Command();
+        p.bf=i;
+        p.position=pos;
+        p.command = commands.drawImage;
+        if(depthSorting){
+            addToColl(p, depth, pos);
+        }else{
+            pos.add(new Vector2(v.GetX(), v.GetY()));
+            p.position=pos;
+            p.depth=depth;
+            Batch.add(p);
+        }
+    }
+    public void Draw(BufferedImage i, Vector2 pos, float scaleX, float scaleY, int depth){
+        Command p = new Command();
+        p.bf=i;
+        p.position=pos;
+        p.scalex = scaleX;
+        p.scaley = scaleY;
+        p.command = commands.drawImage;
+        if(depthSorting){
+            addToColl(p, depth, pos);
+        }else{
+            pos.add(new Vector2(v.GetX(), v.GetY()));
+            p.position=pos;
+            p.depth=depth;
+            Batch.add(p);
+        }
     }
 
     /**
@@ -732,7 +721,8 @@ public class ImageCollection implements Serializable{
         fillArc,
         fillOval,
         fillRect,
-        fillRoundRect;
+        fillRoundRect,
+        drawImage;
     }
     
     private class Command extends Image2D{
@@ -847,6 +837,14 @@ public class ImageCollection implements Serializable{
                 g.drawString(whatToSay, (int)this.position.getX(), (int)this.position.getY());
                 resetFonts(g);
                 resetColor(g);
+            }else if(command == commands.drawImage){
+                move = new AffineTransform();
+                transform = new AffineTransform();
+                transform.setToScale(scalex, scaley);
+                Vector2 s=new Vector2((int)position.getX()-(this.getScaledWidth()/2), (int)position.getY()-(this.getScaledHeight()/2));
+                move.setToTranslation((int)s.getX(), (int)s.getY());
+                move.concatenate(transform);
+                g.drawImage(this.bf, move, l);
             }
         }
     }

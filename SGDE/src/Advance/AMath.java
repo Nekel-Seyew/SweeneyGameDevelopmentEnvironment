@@ -14,6 +14,11 @@ import java.util.List;
  * @author RomulusAaron
  */
 public class AMath {
+    
+    static{
+        System.loadLibrary("hello");
+    }
+    
     /**
      * Tau, the relationship of the circumference of the circle over the radius. Also equal to 2PI.
      */
@@ -230,29 +235,41 @@ public class AMath {
     }
     // Code recieved from: http://stackoverflow.com/questions/11513344/how-to-implement-the-fast-inverse-square-root-in-java
     
-    public static float invSqrtf(float x){
+    public static float invSqrtf(float x) {
         int i;
         float x2, y;
-        
-        x2= x*0.5f;
-        y=x;
-        i=Float.floatToIntBits(y);
-        i=0x5f3759df-(i>>1);
-        y=Float.intBitsToFloat(i);
-        y=y* (1.5f -(x2 * y *y));
-        
+
+        x2 = x * 0.5f;
+        y = x;
+        i = Float.floatToIntBits(y);
+        i = 0x5f3759df - (i >> 1);
+        y = Float.intBitsToFloat(i);
+        y = y * (1.5f - (x2 * y * y));
+
+        return y;
+    }
+
+    public static double invSqrtd(double x) {
+        long i;
+        double x2, y;
+        x2 = x * 0.5f;
+        y = x;
+        i = Double.doubleToLongBits(y);
+        i = 0x5fe6ec85e7de30daL - (i >> 1);
+        y = Double.longBitsToDouble(i);
+        y = y * (1.5 - (x2 * y * y));
         return y;
     }
     
-    public static double invSqrtd(double x){
-        long i;
-        double x2, y;
-         x2=x*0.5f;
-         y=x;
-         i=Double.doubleToLongBits(y);
-         i=0x5fe6ec85e7de30daL- (i>>1);
-         y=Double.longBitsToDouble(i);
-         y=y*(1.5 -(x2 * y *y));
-         return y;
+    public static int[][] transpose(int[][] array){
+        int[][] arrayT = new int[array[0].length][array.length];
+        for(int i=0; i<arrayT.length; i++){
+            for(int j=0; j<arrayT[i].length; j++){
+                arrayT[i][j]=array[j][i];
+            }
+        }
+        return arrayT;
     }
+    
+    public native void sayHello();
 }

@@ -262,4 +262,23 @@ public class Vector2 implements Cloneable, Serializable{
     public double getTheta(Vector2 v){
        return Math.acos(dotProduct(v)/(this.length()*v.length()));
     }
+    
+    public double getThetaFast(Vector2 v){
+        return Math.acos(dotProduct(v) * AMath.invSqrtd(X*X + Y*Y) * AMath.invSqrtd(v.X * v.X + v.Y*v.Y));
+    }
+    
+    public void scalarMultiply(double x){
+        this.X *= x;
+        this.Y *= x;
+    }
+    
+    /**
+     * Rotates this vector by the passed in angle.
+     * @param angle 
+     */
+    public void rotate(double angle){
+        double newX = X*Math.cos(angle) - Y*Math.sin(angle);
+        this.Y = X*Math.sin(angle) + Y*Math.cos(angle);
+        this.X = newX;
+    }
 }

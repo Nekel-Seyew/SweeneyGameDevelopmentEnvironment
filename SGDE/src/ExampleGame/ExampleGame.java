@@ -22,6 +22,7 @@ import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -135,6 +136,18 @@ public class ExampleGame extends AGame implements UDPServerListener{
             t.Draw(batch);
         }
         
+        BufferedImage bf = new BufferedImage(200,200,BufferedImage.TYPE_INT_RGB);
+        int[] data = new int[bf.getHeight() * bf.getWidth()];
+        int i=0;
+        for(int y=0; y<bf.getHeight();y++){
+            for(int x=0; x<bf.getWidth(); x++){
+                //int color = level.getWallSprite(0, 0).getColor(x%64, y%64);
+//                bf.setRGB(i, j, color);
+                data[i++]=0xFF22FF;
+            }
+        }
+        bf.setRGB(0, 0, bf.getWidth(), bf.getHeight(), data, 0, bf.getWidth());
+        batch.Draw(bf, new Vector2(100,400), i);
 //        batch.Draw(myGif, new Vector2(200,200), 1000);
         
         this.setBackgroundColor(Color.red);

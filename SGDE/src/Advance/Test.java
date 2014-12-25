@@ -92,13 +92,39 @@ public class Test {
 //            System.out.print(e[i]+" ");
 //        }
         
-        Object hello=e;
-        System.out.println((hello instanceof exp[]));
+//        Object hello=e;
+//        System.out.println((hello instanceof exp[]));
+//        
+//        Vector2 a = new Vector2(100,200);
+//        Vector2 b = new Vector2(300,-400);
+//        
+//        System.out.println(a.distance(b));
         
-        Vector2 a = new Vector2(100,200);
-        Vector2 b = new Vector2(300,-400);
+        double difference=0;
+        long theta=0, fast=0;
         
-        System.out.println(a.distance(b));
+        for(int i=0; i<100000000; i++){
+            Vector2 first = new Vector2(Math.random()*10000, Math.random()*10000);
+            Vector2 second = new Vector2(Math.random()*10000,Math.random()*10000);
+            
+            long start = System.currentTimeMillis();
+            double theta1 = first.getTheta(second);
+            long end = System.currentTimeMillis();
+            
+            theta += (end-start);
+            
+            start = System.currentTimeMillis();
+            double theta2 = first.getThetaFast(second);
+            end = System.currentTimeMillis();
+            fast +=(end-start);
+            
+            difference += Math.abs(theta1 - theta2);
+        }
+        difference/=100000000;
+        System.out.println("getTheta took: "+theta+"ms");
+        System.out.println("getThetaFast took: "+fast+"ms");
+        System.out.println("Average value difference: "+difference);
+        
     }
     
     public static class exp implements RadixSortable{

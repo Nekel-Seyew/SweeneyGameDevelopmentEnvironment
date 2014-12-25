@@ -5,6 +5,7 @@
 
 package Utilities;
 
+import Advance.AMath;
 import Advance.RadixSortable;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -61,10 +62,11 @@ public class Image2D extends Image implements Serializable, RadixSortable{
     private Shading shading;
     protected int thisID;
     protected static int IDcount=0;
-    protected HashMap subImageCache;
     protected static Hashtable<String, Image> images = new Hashtable<String, Image>();
     //protected static Hashtable<String, HashMap> subimages= new Hashtable<String, HashMap>();
     protected static Hashtable<String, Hashtable<Rectangle, HashMap>> subimages=new Hashtable<String, Hashtable<Rectangle, HashMap>>();
+    
+    protected int[][] colorMap;
     
     
     /**
@@ -77,13 +79,19 @@ public class Image2D extends Image implements Serializable, RadixSortable{
      * @param s -the string of the image name and location.
      */
     public Image2D(String s){
-        subImageCache=new HashMap();
         try{
             
             if(images.containsKey(s)){
                 bf=(BufferedImage)images.get(s);
             }else{
                 bf=toCompatibleImage(ImageIO.read(new File(s)));
+                int[][] imageMap = new int[bf.getWidth()][bf.getHeight()];
+                for(int i=0; i<imageMap.length; i++){
+                    for(int j=0; j<imageMap[i].length; j++){
+                        imageMap[i][j]=bf.getRGB(i, j);
+                    }
+                }
+                colorMap = AMath.transpose(imageMap);
             }
             position= new Vector2();
             drawnArea=new Rect(0,0,bf.getWidth(),bf.getHeight());
@@ -106,13 +114,19 @@ public class Image2D extends Image implements Serializable, RadixSortable{
      * @param optimize whether or not optimize the image for local environments.
      */
     public Image2D(String s, boolean optimize) {
-        subImageCache = new HashMap();
         if (optimize) {
             try {
                 if (images.containsKey(s)) {
                     bf = (BufferedImage) images.get(s);
                 } else {
                     bf = toCompatibleImage(ImageIO.read(new File(s)));
+                    int[][] imageMap = new int[bf.getWidth()][bf.getHeight()];
+                    for (int i = 0; i < imageMap.length; i++) {
+                        for (int j = 0; j < imageMap[i].length; j++) {
+                            imageMap[i][j] = bf.getRGB(i, j);
+                        }
+                    }
+                    colorMap = AMath.transpose(imageMap);
                 }
                 position = new Vector2();
                 drawnArea = new Rect(0, 0, bf.getWidth(), bf.getHeight());
@@ -121,7 +135,7 @@ public class Image2D extends Image implements Serializable, RadixSortable{
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            this.s=new String(s);
+            this.s = new String(s);
             depth = 0;
             thisID = IDcount++;
         } else {
@@ -130,6 +144,13 @@ public class Image2D extends Image implements Serializable, RadixSortable{
                     bf = (BufferedImage) images.get(s);
                 } else {
                     bf = ImageIO.read(new File(s));
+                    int[][] imageMap = new int[bf.getWidth()][bf.getHeight()];
+                    for (int i = 0; i < imageMap.length; i++) {
+                        for (int j = 0; j < imageMap[i].length; j++) {
+                            imageMap[i][j] = bf.getRGB(i, j);
+                        }
+                    }
+                    colorMap = AMath.transpose(imageMap);
                 }
                 position = new Vector2();
                 drawnArea = new Rect(0, 0, bf.getWidth(), bf.getHeight());
@@ -137,11 +158,11 @@ public class Image2D extends Image implements Serializable, RadixSortable{
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            this.s=new String(s);
+            this.s = new String(s);
             depth = 0;
             thisID = IDcount++;
         }
-        shading= new Shading(Color.white,0f);
+        shading = new Shading(Color.white, 0f);
     }
     
     private BufferedImage toCompatibleImage(BufferedImage img){
@@ -161,11 +182,14 @@ public class Image2D extends Image implements Serializable, RadixSortable{
             return new_img;
         }
     }
+    
+    public int getColor(int x, int y){
+        return colorMap[y][x];
+    }
     /**
      * a default constructor, using the super default constructor
      */
     public Image2D(){
-        subImageCache=new HashMap();
         depth=0;
         thisID=IDcount++;
         shading= new Shading(Color.white,0f);
