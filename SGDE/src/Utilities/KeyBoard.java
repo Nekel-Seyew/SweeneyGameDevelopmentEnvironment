@@ -45,7 +45,7 @@ public class KeyBoard implements Cloneable, Serializable{
     public KeyBoard(){
         alphabetKeys=new boolean[26];
         numberKeys=new boolean[10];
-        actionKeys=new boolean[11];
+        actionKeys=new boolean[12];
         numpadKeys=new boolean[10];
     }
 
@@ -197,6 +197,9 @@ public class KeyBoard implements Cloneable, Serializable{
         }
         if(e.getKeyCode()==KeyEvent.VK_SPACE){
             actionKeys[10]=true;
+        }
+        if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
+            actionKeys[11]=true;
         }
         //NumPad
         if(e.getKeyCode()==KeyEvent.VK_NUMPAD0){
@@ -377,6 +380,9 @@ public class KeyBoard implements Cloneable, Serializable{
         }
         if(e.getKeyCode()==KeyEvent.VK_SPACE){
             actionKeys[10]=false;
+        }
+        if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
+            actionKeys[11]=false;
         }
         //NumPad
         if(e.getKeyCode()==KeyEvent.VK_NUMPAD0){
@@ -652,6 +658,9 @@ public class KeyBoard implements Cloneable, Serializable{
         if(c==KeyEvent.VK_SPACE){
             return actionKeys[10];
         }
+        if(c==KeyEvent.VK_ESCAPE){
+            return actionKeys[11];
+        }
         
         //NumPad
         if(c==KeyEvent.VK_NUMPAD0){
@@ -796,18 +805,20 @@ public class KeyBoard implements Cloneable, Serializable{
             return !actionKeys[6];
         }
         if(c==KeyEvent.VK_ALT){
-            return actionKeys[7];
+            return !actionKeys[7];
         }
         if(c==KeyEvent.VK_BACK_SPACE){
-            return actionKeys[8];
+            return !actionKeys[8];
         }
         if(c==KeyEvent.VK_SHIFT){
-            return actionKeys[9];
+            return !actionKeys[9];
         }
         if(c==KeyEvent.VK_SPACE){
-            return actionKeys[10];
+            return !actionKeys[10];
         }
-        
+        if(c==KeyEvent.VK_ESCAPE){
+            return !actionKeys[11];
+        }
         //numbers
         if(c==KeyEvent.VK_0){
             return !numberKeys[0];

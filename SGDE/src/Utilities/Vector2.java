@@ -263,8 +263,14 @@ public class Vector2 implements Cloneable, Serializable{
        return Math.acos(dotProduct(v)/(this.length()*v.length()));
     }
     
+    /**
+     * A very fast approximation for obtaining theta, on average about 30x faster, and with an average error of about 0.1068
+     * @param v vector to get the theta from
+     * @return an approximation for theta between this vector and the passed in
+     */
     public double getThetaFast(Vector2 v){
-        return Math.acos(dotProduct(v) * AMath.invSqrtd(X*X + Y*Y) * AMath.invSqrtd(v.X * v.X + v.Y*v.Y));
+//        return AMath.acos(dotProduct(v) * AMath.invSqrtd(X*X + Y*Y) * AMath.invSqrtd(v.X * v.X + v.Y*v.Y));
+        return AMath.acos(dotProduct(v)/(v.length() * this.length()));
     }
     
     public void scalarMultiply(double x){
@@ -280,5 +286,17 @@ public class Vector2 implements Cloneable, Serializable{
         double newX = X*Math.cos(angle) - Y*Math.sin(angle);
         this.Y = X*Math.sin(angle) + Y*Math.cos(angle);
         this.X = newX;
+    }
+    
+    public void normalize(){
+        double length = this.length();
+        this.X /= length;
+        this.Y /= length;
+    }
+    
+    public void normalizeFast(){
+        double invlength = AMath.invSqrtf((float)(X*X+Y*Y));
+        this.X *= invlength;
+        this.Y *= invlength;
     }
 }

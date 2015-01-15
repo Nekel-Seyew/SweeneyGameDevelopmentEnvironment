@@ -100,30 +100,49 @@ public class Test {
 //        
 //        System.out.println(a.distance(b));
         
-        double difference=0;
-        long theta=0, fast=0;
+        double difference=0, secondDiff=0;
+        long theta=0, fast=0, other=0;
+        double percent = 0;
         
-        for(int i=0; i<100000000; i++){
+        for(int i=0; i<1000000; i++){
             Vector2 first = new Vector2(Math.random()*10000, Math.random()*10000);
             Vector2 second = new Vector2(Math.random()*10000,Math.random()*10000);
             
+            double rando = Math.random()*10000000000f;
+            
             long start = System.currentTimeMillis();
             double theta1 = first.getTheta(second);
+//            double theta1 = Math.acos(rando);
             long end = System.currentTimeMillis();
             
             theta += (end-start);
             
             start = System.currentTimeMillis();
             double theta2 = first.getThetaFast(second);
+//            double theta2 = AMath.acos(rando);
             end = System.currentTimeMillis();
             fast +=(end-start);
             
+//            start = System.currentTimeMillis();
+//            double theta3 = AMath.sqrt(rando);
+//            end = System.currentTimeMillis();
+//            
+//            other += (end-start);
+            
             difference += Math.abs(theta1 - theta2);
+//            secondDiff += Math.abs(theta1-theta3);
         }
-        difference/=100000000;
+        difference/=1000000;
+        percent/=   1000000;
+        secondDiff/=1000000;
+//        System.out.println("Math.asin took: "+theta+"ms");
+//        System.out.println("AMath.asin took: "+fast+"ms");
+//        System.out.println("AMath.sqrt took: "+other+"ms");
         System.out.println("getTheta took: "+theta+"ms");
         System.out.println("getThetaFast took: "+fast+"ms");
         System.out.println("Average value difference: "+difference);
+//        System.out.println("Average other difference: "+secondDiff);
+        
         
     }
     

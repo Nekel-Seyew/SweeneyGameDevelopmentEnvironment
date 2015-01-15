@@ -15,9 +15,9 @@ import java.util.List;
  */
 public class AMath {
     
-    static{
-        System.loadLibrary("hello");
-    }
+//    static{
+//        System.loadLibrary("hello");
+//    }
     
     /**
      * Tau, the relationship of the circumference of the circle over the radius. Also equal to 2PI.
@@ -51,7 +51,22 @@ public class AMath {
      */
     public static double sqrt(double x){
         return Math.pow(Math.E, 0.5*Math.log(x));
-//        return AMath.dist(x/RT2, x/RT2);
+//        return AMath.dist((int)(x/RT2), (int)(x/RT2));
+    }
+    
+    public static double newtonSqrt(double x){
+        double A = x;
+        double xn = x;
+        double fx = x*x - A;
+        double fpx = 2*x;
+        double xn1 = xn - (fx*fpx)/(fpx*fpx - fx*2);
+        while(Math.abs(xn - xn1) > 0.00001 ){
+            xn=xn1;
+            fx = xn*xn - A;
+            fpx = 2*xn;
+            xn1 = xn - (fx*fpx)/(fpx*fpx - fx*2);
+        }
+        return xn1;
     }
     
     /**
@@ -166,6 +181,18 @@ public class AMath {
         return ((PI/2)-arcsin(x));
     }
     /**
+     * A Lagrange Polynomial approximation for arccos, with max error of 0.18 radians.
+     * Do note however that this function obeys the limitations of the arccos function.
+     * @param x A number in radians in range [0,PI]
+     * @return a number in domain [-1,1]
+     */
+    public static double acos( double x) {
+        return (-0.69813170079773212 * x * x - 0.87266462599716477) * x + 1.5707963267948966;
+    }
+    public static double asin(double x){
+        return PI/2 + acos(x);
+    }
+    /**
      * A faster arctangent function compared to Math.atan(x). Within rounding error as well.
      * @param x the value to be inputed
      * @return the arctan(x)
@@ -233,8 +260,7 @@ public class AMath {
         
         return (double)(((approx+512) >> 10));
     }
-    // Code recieved from: http://stackoverflow.com/questions/11513344/how-to-implement-the-fast-inverse-square-root-in-java
-    
+    // Code recieved from: http://stackoverflow.com/questions/11513344/how-to-implement-the-fast-inverse-square-root-in-java 
     public static float invSqrtf(float x) {
         int i;
         float x2, y;
@@ -271,5 +297,4 @@ public class AMath {
         return arrayT;
     }
     
-    public native void sayHello();
 }
