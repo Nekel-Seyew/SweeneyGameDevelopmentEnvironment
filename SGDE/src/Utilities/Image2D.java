@@ -13,6 +13,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.awt.image.ImageProducer;
 import java.awt.image.RenderedImage;
+import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.Serializable;
 import java.util.HashMap;
@@ -85,10 +86,11 @@ public class Image2D extends Image implements Serializable, RadixSortable{
                 bf=(BufferedImage)images.get(s);
             }else{
                 bf=toCompatibleImage(ImageIO.read(new File(s)));
+//                WritableRaster wr = bf.getAlphaRaster();
                 int[][] imageMap = new int[bf.getWidth()][bf.getHeight()];
                 for(int i=0; i<imageMap.length; i++){
                     for(int j=0; j<imageMap[i].length; j++){
-                        imageMap[i][j]=bf.getRGB(i, j);
+                        imageMap[i][j]=new Color(bf.getRGB(i, j), true).getRGB();
                     }
                 }
                 colorMap = AMath.transpose(imageMap);
@@ -123,7 +125,7 @@ public class Image2D extends Image implements Serializable, RadixSortable{
                     int[][] imageMap = new int[bf.getWidth()][bf.getHeight()];
                     for (int i = 0; i < imageMap.length; i++) {
                         for (int j = 0; j < imageMap[i].length; j++) {
-                            imageMap[i][j] = bf.getRGB(i, j);
+                            imageMap[i][j]=new Color(bf.getRGB(i, j), true).getRGB();
                         }
                     }
                     colorMap = AMath.transpose(imageMap);
@@ -147,7 +149,7 @@ public class Image2D extends Image implements Serializable, RadixSortable{
                     int[][] imageMap = new int[bf.getWidth()][bf.getHeight()];
                     for (int i = 0; i < imageMap.length; i++) {
                         for (int j = 0; j < imageMap[i].length; j++) {
-                            imageMap[i][j] = bf.getRGB(i, j);
+                            imageMap[i][j]=new Color(bf.getRGB(i, j), true).getRGB();
                         }
                     }
                     colorMap = AMath.transpose(imageMap);
@@ -185,6 +187,9 @@ public class Image2D extends Image implements Serializable, RadixSortable{
     
     public int getColor(int x, int y){
         return colorMap[y][x];
+    }
+    public int[][] getColumnMajorColorMap(){
+        return this.colorMap;
     }
     /**
      * a default constructor, using the super default constructor

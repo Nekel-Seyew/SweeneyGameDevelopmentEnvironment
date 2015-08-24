@@ -259,6 +259,11 @@ public class Vector2 implements Cloneable, Serializable{
         return new Vector3(this).crossProduct(v);
     }
     
+    /**
+     * Calculates the angle between this vector and another
+     * @param v the other vector
+     * @return the angle theta between the two
+     */
     public double getTheta(Vector2 v){
        return Math.acos(dotProduct(v)/(this.length()*v.length()));
     }
