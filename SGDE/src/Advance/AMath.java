@@ -70,18 +70,24 @@ public class AMath {
     }
     
     /**
-     * A faster Sine function compared to Math.sin(x). Within rounding error as well.
+     * A faster Sine function compared to Math.sin(x). On average, about a 
+     * difference of 0.3 degrees, with max error of 5 degrees. 1.3 times faster
+     * for x in range [0,2PI], up to 10 times faster for x in range[0,100000000]
      * @param x the value to be inputed
      * @return the sin(x)
      */
     public static double sin(double x){
         x%=TAU;
-        double x3= x*x*x;
-        double x5= x*x*x*x*x;
-        double x7= x*x*x*x*x*x*x;
-        double x9= x*x*x*x*x*x*x*x*x;
-        double x11=x*x*x*x*x*x*x*x*x*x*x;
-        return ((x) - (x3/6) + (x5/120) - (x7/5040) + (x9/362880) - (x11/39916800));
+        double x2 = x*x;
+        double x3= x2*x;
+        double x5= x3*x2;
+        double x7= x5*x2;
+        double x9= x7*x2;
+        double x11=x9*x2;
+        double x13 = x11 * x2;
+        double x15 = x13 * x2;
+        //return x*(1-x2*(1./6 + x2*(1./120 -x2*(1.0/5040 + x2*(1.0/362880 - x2/39916800.)))));
+        return ((x) - (x3/6) + (x5/120) - (x7/5040) + (x9/362880) - (x11/39916800) + (x13/6227020800l) - (x15/1307674368000l));
     }
     /**
      * A faster cosine function compared to Math.cos(x). Within rounding error as well.
@@ -91,12 +97,13 @@ public class AMath {
     public static double cos(double x){
         x%=TAU;
         double x2= x*x;
-        double x4= x*x*x*x;
-        double x6= x*x*x*x*x*x;
-        double x8= x*x*x*x*x*x*x*x;
-        double x10=x*x*x*x*x*x*x*x*x*x;
-        double x12=x*x*x*x*x*x*x*x*x*x*x*x;
-        return (1 - (x2/2) + (x4/24) - (x6/720) + (x8/40320) - (x10/3628800) +(x12/479001600));
+        double x4= x2*x2;
+        double x6= x4*x2;
+        double x8= x6*x2;
+        double x10=x8*x2;
+        double x12=x10*x2;
+        double x14 =x12*x2;
+        return (1 - (x2/2) + (x4/24) - (x6/720) + (x8/40320) - (x10/3628800) +(x12/479001600) - (x14/87178291200l));
     }
     /**
      * A faster cosecant function compared to Math.csc(x). Within rounding error as well.
@@ -157,13 +164,14 @@ public class AMath {
      * @return the arcsin(x)
      */
     public static double arcsin(double x){
-        double x3= x*x*x;
-        double x5= x*x*x*x*x;
-        double x7= x*x*x*x*x*x*x;
-        double x9= x*x*x*x*x*x*x*x*x;
-        double x11=x*x*x*x*x*x*x*x*x*x*x;
-        double x13=x*x*x*x*x*x*x*x*x*x*x*x*x;
-        double x15=x*x*x*x*x*x*x*x*x*x*x*x*x*x*x;
+        double x2 = x*x;
+        double x3= x2*x;
+        double x5= x3*x2;
+        double x7= x5*x2;
+        double x9= x7*x2;
+        double x11=x9*x2;
+        double x13=x11*x2;
+        double x15=x13*x2;
         
         return x + (0.5 * x3)/3 + (0.375 * x5)/5 + (0.3125 * x7)/7 
                  + (((105)/(384))*x9)/9 

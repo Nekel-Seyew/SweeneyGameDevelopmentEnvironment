@@ -100,49 +100,80 @@ public class Test {
 //        
 //        System.out.println(a.distance(b));
         
-        double difference=0, secondDiff=0;
-        long theta=0, fast=0, other=0;
-        double percent = 0;
-        
-        for(int i=0; i<1000000; i++){
-            Vector2 first = new Vector2(Math.random()*10000, Math.random()*10000);
-            Vector2 second = new Vector2(Math.random()*10000,Math.random()*10000);
-            
-            double rando = Math.random()*10000000000f;
-            
-            long start = System.currentTimeMillis();
-            double theta1 = first.getTheta(second);
-//            double theta1 = Math.acos(rando);
-            long end = System.currentTimeMillis();
-            
-            theta += (end-start);
-            
-            start = System.currentTimeMillis();
-            double theta2 = first.getThetaFast(second);
-//            double theta2 = AMath.acos(rando);
-            end = System.currentTimeMillis();
-            fast +=(end-start);
-            
-//            start = System.currentTimeMillis();
-//            double theta3 = AMath.sqrt(rando);
-//            end = System.currentTimeMillis();
+//        double difference=0, secondDiff=0;
+//        long theta=0, fast=0, other=0;
+//        double percent = 0;
+//        
+//        for(int i=0; i<1000000; i++){
+//            Vector2 first = new Vector2(Math.random()*10000, Math.random()*10000);
+//            Vector2 second = new Vector2(Math.random()*10000,Math.random()*10000);
 //            
-//            other += (end-start);
-            
-            difference += Math.abs(theta1 - theta2);
-//            secondDiff += Math.abs(theta1-theta3);
-        }
-        difference/=1000000;
-        percent/=   1000000;
-        secondDiff/=1000000;
-//        System.out.println("Math.asin took: "+theta+"ms");
-//        System.out.println("AMath.asin took: "+fast+"ms");
-//        System.out.println("AMath.sqrt took: "+other+"ms");
-        System.out.println("getTheta took: "+theta+"ms");
-        System.out.println("getThetaFast took: "+fast+"ms");
-        System.out.println("Average value difference: "+difference);
+//            double rando = Math.random()*10000000000f;
+//            
+//            long start = System.currentTimeMillis();
+//            double theta1 = first.getTheta(second);
+////            double theta1 = Math.acos(rando);
+//            long end = System.currentTimeMillis();
+//            
+//            theta += (end-start);
+//            
+//            start = System.currentTimeMillis();
+//            double theta2 = first.getThetaFast(second);
+////            double theta2 = AMath.acos(rando);
+//            end = System.currentTimeMillis();
+//            fast +=(end-start);
+//            
+////            start = System.currentTimeMillis();
+////            double theta3 = AMath.sqrt(rando);
+////            end = System.currentTimeMillis();
+////            
+////            other += (end-start);
+//            
+//            difference += Math.abs(theta1 - theta2);
+////            secondDiff += Math.abs(theta1-theta3);
+//        }
+//        difference/=1000000;
+//        percent/=   1000000;
+//        secondDiff/=1000000;
+////        System.out.println("Math.asin took: "+theta+"ms");
+////        System.out.println("AMath.asin took: "+fast+"ms");
+////        System.out.println("AMath.sqrt took: "+other+"ms");
+//        System.out.println("getTheta took: "+theta+"ms");
+//        System.out.println("getThetaFast took: "+fast+"ms");
+//        System.out.println("Average value difference: "+difference);
 //        System.out.println("Average other difference: "+secondDiff);
         
+        long start, end;
+        double asin=0, msin=0;
+        long itterations = 10000000;
+        double diff=0;
+        
+        double max_diff = Double.MIN_VALUE, min_diff = Double.MAX_VALUE;
+        
+        for(long i=0; i<itterations; i++){
+            double ra = Math.random()*100000000;
+            
+            start = System.nanoTime();
+            double asinv = AMath.sin(ra);
+            end = System.nanoTime();
+            asin += (end-start);
+            
+            start = System.nanoTime();
+            double msinv = Math.sin(ra);
+            end = System.nanoTime();
+            msin += (end-start);
+            
+            diff += Math.abs(asinv-msinv);
+            
+            if(Math.abs(asinv-msinv) < min_diff) min_diff = Math.abs(asinv-msinv);
+            if(Math.abs(asinv-msinv) > max_diff) max_diff = Math.abs(asinv-msinv);
+        }
+        
+        System.out.println("Math.sin took: "+msin/itterations+" ns");
+        System.out.println("AMath.sin took: "+asin/itterations+" ns");
+        System.out.println("Average Difference: "+diff/itterations);
+        System.out.println("Max Difference: "+max_diff);
+        System.out.println("Min Difference: "+min_diff);
         
     }
     
