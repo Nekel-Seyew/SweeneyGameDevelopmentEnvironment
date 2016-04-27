@@ -1,24 +1,5 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package Game;
-
-import Utilities.ImageCollection;
-import Utilities.InputAdvance;
-import Utilities.KeyBoard;
-import Utilities.Mouse;
-import Utilities.SoundBatch;
-import Utilities.ViewScreen;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.event.*;
-import java.awt.image.BufferedImage;
-import java.io.*;
-import javax.sound.sampled.*;
-import javax.swing.*;
-
-/*Copyright (c) 2011, Kyle D. Sweeney
+Copyright (c) 2011, Kyle D. Sweeney
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -43,6 +24,19 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package Game;
+
+import Utilities.ImageCollection;
+import Utilities.InputAdvance;
+import Utilities.KeyBoard;
+import Utilities.Mouse;
+import Utilities.SoundBatch;
+import Utilities.ViewScreen;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import javax.swing.*;
 
 /**
  * This is the base class for all subsequent games. It will update and draw everything.
