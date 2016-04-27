@@ -122,12 +122,26 @@ public class AMath {
         return 1/cos(x);
     }
     /**
-     * A faster tangent function compared to Math.tan(x). Within rounding error as well.
-     * @param x the value to be inputed
+     * A faster tangent function compared to Math.tan(x). Behaves well [-PI/4,PI/4].
+     * Starts to misbehave between [PI/4, PI/2]. I think this is because of too many multiplications.
+     * Note, this needs to be replaced with a Lagrange Polynomial.
+     * @param x 
      * @return the tan(x)
      */
     public static double tan(double x){
-        return sin(x)/cos(x);
+        double x2 = x*x;
+       // double x3 = x2*x;
+       // double x5 = x3*x2;
+        //double x7 = x5*x2;
+        //double x9 = x7*x2;
+        //double x11= x9*x2;
+        //double x13= x11*x2;
+        //double x15= x13*x2;
+        return x*(1 + x2*((1/3) + (x2)*((2/15) + (x2)*((17/315) 
+                + (x2)*((62/2835)+(x2)*((1382/155925)+(x2)*((21844/6081075)
+                +(x2)*(929569/638512875))))))));
+        //x+x^3/3+2x^5/15+17x^7/315+62x^9/2835
+        //return sin(x)/cos(x);
     }
     /**
      * A faster cotangent function compared to Math.cot(x). Within rounding error as well.
@@ -157,37 +171,6 @@ public class AMath {
     public static double min(double a, double b){
         return (a<b || equals(a,b)) ? a : b;
     }
-    
-    /**
-     * A faster arcsine function compared to Math.asinx). Within rounding error as well.
-     * @param x the value to be inputed
-     * @return the arcsin(x)
-     */
-    public static double arcsin(double x){
-        double x2 = x*x;
-        double x3= x2*x;
-        double x5= x3*x2;
-        double x7= x5*x2;
-        double x9= x7*x2;
-        double x11=x9*x2;
-        double x13=x11*x2;
-        double x15=x13*x2;
-        
-        return x + (0.5 * x3)/3 + (0.375 * x5)/5 + (0.3125 * x7)/7 
-                 + (((105)/(384))*x9)/9 
-                 + (((945)/(3840))*x11)/11
-                 + (((10395)/(46080))*x13)/13
-                 + (((135135)/(645120))*x15)/15;
-    }
-    
-    /**
-     * A faster arccosine function compared to Math.acos(x). Within rounding error as well.
-     * @param x the value to be inputed
-     * @return the arccos(x)
-     */
-    public static double arccos(double x){
-        return ((PI/2)-arcsin(x));
-    }
     /**
      * A Lagrange Polynomial approximation for arccos, with max error of 0.18 radians.
      * Do note however that this function obeys the limitations of the arccos function.
@@ -197,21 +180,27 @@ public class AMath {
     public static double acos( double x) {
         return (-0.69813170079773212 * x * x - 0.87266462599716477) * x + 1.5707963267948966;
     }
+    /**
+     * Do not use this function. The Lagrange Polynomial has not been calculated yet.
+     * @param x
+     * @return 
+     */
     public static double asin(double x){
         return PI/2 + acos(x);
     }
     /**
-     * A faster arctangent function compared to Math.atan(x). Within rounding error as well.
+     * A faster arctangent function compared to Math.atan(x). Really not good.
      * @param x the value to be inputed
      * @return the arctan(x)
      */
     public static double arctan(double x){
-        double x3= x*x*x;
-        double x5= x*x*x*x*x;
-        double x7= x*x*x*x*x*x*x;
-        double x9= x*x*x*x*x*x*x*x*x;
-        double x11=x*x*x*x*x*x*x*x*x*x*x;
-        double x13=x*x*x*x*x*x*x*x*x*x*x*x*x;
+        double x2 = x*x;
+        double x3= x2*x;
+        double x5= x3*x2;
+        double x7= x5*x2;
+        double x9= x7*x2;
+        double x11=x9*x2;
+        double x13=x11*x2;
         
         return x - x3/3 + x5/5 - x7/7 + x9/9 - x11/11 + x13/13;
     }
@@ -229,7 +218,7 @@ public class AMath {
      * @return the arcsec(x)
      */
     public static double arcsec(double x){
-        return arccos((1/x));
+        return acos((1/x));
     }
     /**
      * A faster arccosecant function compared to Math.acsc(x). Within rounding error as well.
@@ -237,7 +226,7 @@ public class AMath {
      * @return the arccsc(x)
      */
     public static double arccsc(double x){
-        return arcsin((1/x));
+        return asin((1/x));
     }
     
     public static double distance(Vector2 a, Vector2 b){

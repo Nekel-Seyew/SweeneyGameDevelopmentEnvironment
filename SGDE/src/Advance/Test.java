@@ -151,7 +151,7 @@ public class Test {
         double max_diff = Double.MIN_VALUE, min_diff = Double.MAX_VALUE;
         
         for(long i=0; i<itterations; i++){
-            double ra = Math.random()*100000000;
+            double ra = Math.random()*10000000000f * (Math.random() < 0.5? 1 : -1);
             
             start = System.nanoTime();
             double asinv = AMath.sin(ra);
@@ -169,12 +169,13 @@ public class Test {
             if(Math.abs(asinv-msinv) > max_diff) max_diff = Math.abs(asinv-msinv);
         }
         
-        System.out.println("Math.sin took: "+msin/itterations+" ns");
-        System.out.println("AMath.sin took: "+asin/itterations+" ns");
+        System.out.println("Math.tan took: "+msin/itterations+" ns");
+        System.out.println("AMath.tan took: "+asin/itterations+" ns");
         System.out.println("Average Difference: "+diff/itterations);
         System.out.println("Max Difference: "+max_diff);
         System.out.println("Min Difference: "+min_diff);
-        
+        System.out.println("AMath.tan(PI/2): "+AMath.tan(AMath.PI/2));
+        System.out.println("Math.Tan(PI/2): "+Math.tan(AMath.PI/2));
     }
     
     public static class exp implements RadixSortable{
