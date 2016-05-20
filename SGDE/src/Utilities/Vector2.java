@@ -27,6 +27,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package Utilities;
 
+import Game3D.Vector3;
 import Advance.AMath;
 import Advance.Matrix;
 import java.awt.Point;

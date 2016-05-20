@@ -24,9 +24,11 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package Utilities;
+package Game3D;
 
+import Advance.AMath;
 import Advance.Matrix;
+import Utilities.Vector2;
 import java.awt.Point;
 import java.io.Serializable;
 
@@ -59,12 +61,12 @@ public class Vector3 extends Vector2 implements Serializable{
     
     public Vector3(Vector2 v){
         if(v instanceof Vector3){
-            X=v.X;
-            Y=v.Y;
+            X=v.getX();
+            Y=v.getY();
             Z=((Vector3)v).Z;
         }else{
-            X=v.X;
-            Y=v.Y;
+            X=v.getX();
+            Y=v.getY();
             Z=0;
         }
     }
@@ -87,7 +89,7 @@ public class Vector3 extends Vector2 implements Serializable{
     
     @Override
     public double length(){
-        return Math.sqrt(Math.pow(X, 2)+Math.pow(Y, 2)+Math.pow(Z, 2));
+        return Math.sqrt(X*X+Y*Y+Z*Z);
     }
     
     @Override
@@ -117,7 +119,7 @@ public class Vector3 extends Vector2 implements Serializable{
         this.Z = Z;
     }
     public double distance(Vector3 v){
-        return Math.sqrt(Math.pow(X-v.X, 2)+Math.pow(Y-v.Y, 2)+Math.pow(Z-v.Z, 2));
+        return Math.sqrt(((X-v.X)*(X-v.X)) + ((Y-v.Y)*(Y-v.Y)) + ((Z-v.Z)*(Z-v.Z)));
     }
     public void add(Vector3 v){
         X+=v.X;
@@ -154,6 +156,7 @@ public class Vector3 extends Vector2 implements Serializable{
     public double dotProduct(Vector3 o){
         return X*o.X+Y*o.Y+Z*o.Z;
     }
+    
     public Vector3 crossProduct(Vector3 v){
         double x,y,z;
         x=Y*v.Z-Z*v.Y;
@@ -161,6 +164,7 @@ public class Vector3 extends Vector2 implements Serializable{
         z=X*v.Y-Y*v.X;
         return new Vector3(x,y,z);
     }
+    
     @Override
     public Vector3 crossProduct(Vector2 v) {
         if (v instanceof Vector2) {
@@ -168,6 +172,29 @@ public class Vector3 extends Vector2 implements Serializable{
         } else {
             return crossProduct(new Vector3(v));
         }
+    }
+    
+    @Override
+    public void scalarMultiply(double x){
+        this.X *= x;
+        this.Y *= x;
+        this.Z *= x;
+    }
+    
+    @Override
+    public void normalize(){
+        double length = 1.0/this.length();
+        this.X *= length;
+        this.Y *= length;
+        this.Z *= length;
+    }
+    
+    @Override
+    public void normalizeFast(){
+        double invlength = AMath.invSqrtd((X*X+Y*Y+Z*Z));
+        this.X *= invlength;
+        this.Y *= invlength;
+        this.Z *= invlength;
     }
     
     public static Vector3 crossProduct(Vector3 v1, Vector3 v2){

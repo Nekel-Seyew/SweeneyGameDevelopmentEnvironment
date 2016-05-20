@@ -290,9 +290,9 @@ public class AMath {
         float x2, y;
 
         x2 = x * 0.5f;
-        y = x;
-        i = Float.floatToIntBits(y);
-        i = 0x5f3759df - (i >> 1);
+        //y = x;
+        //i = Float.floatToIntBits(x);
+        i = 0x5f3759df - (Float.floatToIntBits(x) >> 1);
         y = Float.intBitsToFloat(i);
         y = y * (1.5f - (x2 * y * y));
 
@@ -301,16 +301,25 @@ public class AMath {
 
     public static double invSqrtd(double x) {
         long i;
-        double x2, y;
-        x2 = x * 0.5f;
-        y = x;
-        i = Double.doubleToLongBits(y);
-        i = 0x5fe6ec85e7de30daL - (i >> 1);
+        double y;
+        //x2 = x * 0.5;
+        //y = x;
+        //i = Double.doubleToLongBits(x);
+        i = 0x5fe6ec85e7de30daL - (Double.doubleToLongBits(x) >> 1);
         y = Double.longBitsToDouble(i);
-        y = y * (1.5 - (x2 * y * y));
+        y = y * (1.5 - (x * 0.5* y * y));
         return y;
     }
     
+    public static float fastInverseSquareRoot(float x) {
+        float xHalf = 0.5F * x;
+        int temp = Float.floatToRawIntBits(x);
+        temp = 0x5F3759DF - (temp >> 1);
+        float newX = Float.intBitsToFloat(temp);
+        newX = newX * (1.5F - xHalf * newX * newX);
+        return newX;
+    }
+
     public static int[][] transpose(int[][] array){
         int[][] arrayT = new int[array[0].length][array.length];
         for(int i=0; i<arrayT.length; i++){

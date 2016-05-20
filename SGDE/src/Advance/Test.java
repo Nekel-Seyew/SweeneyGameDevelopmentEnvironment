@@ -4,7 +4,10 @@
  */
 package Advance;
 
+import Game3D.PolygonTexture;
+import Game3D.Vector3;
 import Utilities.Vector2;
+import java.awt.geom.AffineTransform;
 
 /**
  *
@@ -83,7 +86,7 @@ public class Test {
 //        res=AMath.dist(200, 1234);
 //        System.out.println("AMath distance: Time: "+(System.nanoTime()-start)+" Result: "+res);
         
-        exp[] e=new exp[100];
+        //exp[] e=new exp[100];
 //        for(int i=0; i<e.length; i++){
 //            e[i]=new exp((int)(Math.random()*1000));
 //        }
@@ -108,7 +111,7 @@ public class Test {
 //            Vector2 first = new Vector2(Math.random()*10000, Math.random()*10000);
 //            Vector2 second = new Vector2(Math.random()*10000,Math.random()*10000);
 //            
-//            double rando = Math.random()*10000000000f;
+//            double rando = Math.random()*2000f;
 //            
 //            long start = System.currentTimeMillis();
 //            double theta1 = first.getTheta(second);
@@ -145,37 +148,62 @@ public class Test {
         
         long start, end;
         double asin=0, msin=0;
-        long itterations = 10000000;
+        long itterations = 1000000000;
         double diff=0;
         
         double max_diff = Double.MIN_VALUE, min_diff = Double.MAX_VALUE;
         
         for(long i=0; i<itterations; i++){
-            double ra = Math.random()*10000000000f * (Math.random() < 0.5? 1 : -1);
+            //Math.random()*2000f * (Math.random() < 0.5? 1 : -1);
+            double ra = Math.round(Math.random()*2000f);
+            double rb = Math.round(Math.random()*2000f);
+            double rc = Math.round(Math.random()*2000f);
+            double rd = Math.round(Math.random()*2000f);
+            double re = Math.round(Math.random()*2000f);
+            double rf = Math.round(Math.random()*2000f);
+            
+            double rg = Math.round(Math.random()*2000f);
+            double rh = Math.round(Math.random()*2000f);
+            double ri = Math.round(Math.random()*2000f);
+            double rj = Math.round(Math.random()*2000f);
+            double rk = Math.round(Math.random()*2000f);
+            double rl = Math.round(Math.random()*2000f);
+            
+            Vector2 a = new Vector2(ra,rb), b = new Vector2(rc,rd), c = new Vector2(re,rf);
+            Vector2 d = new Vector2(rg,rh), e = new Vector2(ri,rj), f = new Vector2(rk,rl);
             
             start = System.nanoTime();
-            double asinv = AMath.sin(ra);
+            AffineTransform af = PolygonTexture.createTransform(new Vector2[]{a,b,c}, new Vector2[]{d,e,f});
+            diff += af.getDeterminant();
+            //System.out.println(af.toString());
             end = System.nanoTime();
             asin += (end-start);
             
-            start = System.nanoTime();
-            double msinv = Math.sin(ra);
-            end = System.nanoTime();
-            msin += (end-start);
+//            start = System.nanoTime();
+//            b.normalize();
+//            end = System.nanoTime();
+//            msin += (end-start);
             
-            diff += Math.abs(asinv-msinv);
-            
-            if(Math.abs(asinv-msinv) < min_diff) min_diff = Math.abs(asinv-msinv);
-            if(Math.abs(asinv-msinv) > max_diff) max_diff = Math.abs(asinv-msinv);
+//            diff += Math.abs(a.length() - b.length());
+//            double ndiff = a.length() - b.length();
+//            
+//            if(Math.abs(ndiff) < min_diff) min_diff = Math.abs(ndiff);
+//            if(Math.abs(ndiff) > max_diff) max_diff = Math.abs(ndiff);
         }
         
-        System.out.println("Math.tan took: "+msin/itterations+" ns");
-        System.out.println("AMath.tan took: "+asin/itterations+" ns");
-        System.out.println("Average Difference: "+diff/itterations);
-        System.out.println("Max Difference: "+max_diff);
-        System.out.println("Min Difference: "+min_diff);
-        System.out.println("AMath.tan(PI/2): "+AMath.tan(AMath.PI/2));
-        System.out.println("Math.Tan(PI/2): "+Math.tan(AMath.PI/2));
+        //System.out.println("normalize took: "+msin/itterations+" ns");
+        System.out.println("Generate AffineTransform took: "+asin/itterations+" ns");
+        //Generate AffineTransform took: 294.4174653 ns per iteration for 10,000,000 iterations
+        //Generate AffineTransform took: 279.781312 ns
+        //Generate AffineTransform took: 251.0466226 ns
+        //Generate AffineTransform took: 182.831670195 ns per iteration for 1,000,000,000 iterations
+        //Bassically, can handle 59,000 of these in 16ms, so considering everything else, conservative rendering of 10,000-20,000
+        
+        //System.out.println("Average Difference: "+diff/itterations);
+        //System.out.println("Max Difference: "+max_diff);
+        //System.out.println("Min Difference: "+min_diff);
+        //System.out.println("AMath.tan(PI/2): "+AMath.tan(AMath.PI/2));
+       // System.out.println("Math.Tan(PI/2): "+Math.tan(AMath.PI/2));
     }
     
     public static class exp implements RadixSortable{
