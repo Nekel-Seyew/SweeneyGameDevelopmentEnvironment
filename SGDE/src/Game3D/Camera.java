@@ -16,6 +16,12 @@ public class Camera {
     Vector3 up;
     Vector3 forward;
     Vector3 sideways;
+    projection currentProjection;
+    
+    public enum projection{
+        perspective,
+        orthographic
+    }
     
     public Camera(Vector3 pos, Vector3 up, Vector3 forward){
         this.pos = pos;
@@ -58,17 +64,35 @@ public class Camera {
         du.scalarMultiply(x);
         this.pos.add(du);
     }
-    
+    /**
+     * Rolls left/right the camera along the "forward" axis
+     * @param theta radians to rotate
+     */
     public void roll(double theta){
-        
+        Quaternion q = new Quaternion(this.forward,theta);
+        this.up = q.rotate(this.up);
+        this.sideways = q.rotate(this.sideways);
     }
+    /**
+     * Spins the camera left/right, around the"up" axis
+     * @param theta radians to spin
+     */
     public void yaw(double theta){
-        
+        Quaternion q = new Quaternion(this.up,theta);
+        this.forward = q.rotate(this.forward);
+        this.sideways = q.rotate(this.sideways);
     }
+    /**
+     * Rotates the camera up/down, around the sideways axis
+     * @param theta radians to rotate
+     */
     public void pitch(double theta){
-        
+        Quaternion q = new Quaternion(this.sideways,theta);
+        this.up = q.rotate(this.up);
+        this.forward = q.rotate(this.forward);
     }
-    public void rotate(Quaternion qr){
-        
+    
+    public void setProjection(projection p){
+        this.currentProjection = p;
     }
 }
