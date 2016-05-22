@@ -37,6 +37,10 @@ import java.io.Serializable;
  * @author HAL-9000
  */
 public class Vector3 extends Vector2 implements Serializable{
+    static final public Vector3 I = new Vector3(1,0,0);
+    static final public Vector3 J = new Vector3(0,1,0);
+    static final public Vector3 K = new Vector3(0,0,1);
+    
     protected double Z;
     
     public Vector3(double x, double y, double z){
@@ -120,6 +124,9 @@ public class Vector3 extends Vector2 implements Serializable{
     }
     public double distance(Vector3 v){
         return Math.sqrt(((X-v.X)*(X-v.X)) + ((Y-v.Y)*(Y-v.Y)) + ((Z-v.Z)*(Z-v.Z)));
+    }
+    public double distanceSquare(Vector3 v){
+        return ((X-v.X)*(X-v.X)) + ((Y-v.Y)*(Y-v.Y)) + ((Z-v.Z)*(Z-v.Z));
     }
     public void add(Vector3 v){
         X+=v.X;

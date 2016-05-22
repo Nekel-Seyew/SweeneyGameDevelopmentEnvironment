@@ -17,17 +17,25 @@ public class Camera {
     Vector3 forward;
     Vector3 sideways;
     projection currentProjection;
+    double fov;
+    double fovd;
+    int screenSizeX, screenSizeY;
     
     public enum projection{
         perspective,
         orthographic
     }
     
-    public Camera(Vector3 pos, Vector3 up, Vector3 forward){
+    public Camera(Vector3 pos, Vector3 up, Vector3 forward, double fov, int height, int width){
         this.pos = pos;
         this.up = up;
         this.forward = forward;
         this.sideways = forward.crossProduct(up);
+        this.fov = fov;
+        this.fovd = 1.0/Math.tan(fov/2.0);
+        this.screenSizeX = height;
+        this.screenSizeY = width;
+        this.currentProjection = projection.perspective;
         
         this.up.normalize();
         this.forward.normalize();
@@ -71,7 +79,9 @@ public class Camera {
     public void roll(double theta){
         Quaternion q = new Quaternion(this.forward,theta);
         this.up = q.rotate(this.up);
+        this.up.normalize();
         this.sideways = q.rotate(this.sideways);
+        this.sideways.normalize();
     }
     /**
      * Spins the camera left/right, around the"up" axis
@@ -80,7 +90,9 @@ public class Camera {
     public void yaw(double theta){
         Quaternion q = new Quaternion(this.up,theta);
         this.forward = q.rotate(this.forward);
+        this.forward.normalize();
         this.sideways = q.rotate(this.sideways);
+        this.sideways.normalize();
     }
     /**
      * Rotates the camera up/down, around the sideways axis
@@ -89,10 +101,45 @@ public class Camera {
     public void pitch(double theta){
         Quaternion q = new Quaternion(this.sideways,theta);
         this.up = q.rotate(this.up);
+        this.up.normalize();
         this.forward = q.rotate(this.forward);
+        this.forward.normalize();
+    }
+
+    public Vector3 getPos() {
+        return pos;
+    }
+
+    public Vector3 getUp() {
+        return up;
+    }
+
+    public Vector3 getForward() {
+        return forward;
+    }
+
+    public Vector3 getSideways() {
+        return sideways;
     }
     
     public void setProjection(projection p){
         this.currentProjection = p;
+    }
+    public projection getProjection(){
+        return this.currentProjection;
+    }
+    
+    public double getfov(){
+        return this.fov;
+    }
+    public double getfovd(){
+        return this.fovd;
+    }
+    
+    public int getWidth(){
+        return this.screenSizeX;
+    }
+    public int getHeight(){
+        return this.screenSizeY;
     }
 }
