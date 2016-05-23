@@ -41,6 +41,7 @@ public class PolygonTexture implements Renderable{
     Vector3 normal;
     int[] xpos = new int[3];
     int[] ypos = new int[3];
+    double zdepth=0;
     
     /**
      * Constructs a textured polygon.
@@ -138,30 +139,74 @@ public class PolygonTexture implements Renderable{
     }
     
     @Override
-    public void render(Graphics2D g, Camera c) {
+    public void prerender(Camera c) {
         double cx = c.getPos().getX();
         double cy = c.getPos().getY();
         double cz = c.getPos().getZ();
-        double n = -1.0/(cz);
+        double n = -1.0/cz;
         Camera.projection projection = c.getProjection();
         if(projection == Camera.projection.orthographic){
             
         }else if(projection == Camera.projection.perspective){
-            
+            zdepth = 0;
             for (int i = 0; i < 3; i++) {
                 double x = this.worldPoints[i].getX();
                 double y = this.worldPoints[i].getY();
                 double z = this.worldPoints[i].getZ();
                 double w = 1.0;
+                double near = c.getNear();
+                double far = c.getFar();
                 
                 Vector3 s = c.getSideways();
                 Vector3 u = c.getUp();
                 Vector3 f = c.getForward();
                 
-                double dx = s.getX()*x + s.getY()*y + (s.getZ()+n*cx)*z - cx*w;
-                double dy = u.getX()*x + u.getY()*y + (u.getZ()+n*cy)*z - cy*w;
-                double dz = f.getX()*x + f.getY()*y + (f.getZ()+n*cz)*z - cz*w;
-                double dw = n*z + 1*w;
+                //double right = near*Math.tan(0.5*c.getFov());
+                //double top = right / c.getAspectRatio();
+                //double m = -(far+near)/(far-near);
+                //double k = (2 * far * near) / (far - near);
+                //double nf = near/far;
+                //double nt = near/top;
+                
+//                double dx = nf*(s.getX()*x + s.getY()*y + s.getZ()*z - cx*w);
+//                double dy = nt*(u.getX()*x + u.getY()*y + u.getZ()*z - cy*w);
+//                double dz = m*(f.getX()*x + f.getY()*y + f.getZ()*z - (cz-(k/m))*w);
+//                double dw = -f.getX()*x -f.getY()*y -f.getZ()*z + cz*w;
+                
+//                double dx = s.getX()*x + s.getY()*y + (s.getZ()+n*cx)*z - cx*w;
+//                double dy = u.getX()*x + u.getY()*y + (u.getZ()+n*cy)*z - cy*w;
+//                double dz = f.getX()*x + f.getY()*y + (f.getZ()+n*cz)*z - cz*w;
+//                double dw = n*z + 1*w;
+                
+//                double dx = s.getX()*x + s.getY()*y + (s.getZ())*z - cx*w;
+//                double dy = u.getX()*x + u.getY()*y + (u.getZ())*z - cy*w;
+//                double dz = f.getX()*x + f.getY()*y + (f.getZ())*z - cz*w;
+//                double dw = n*(f.getX()*x + f.getY()*y+f.getZ()*z -(cz+1/n)*w);
+                
+//                int vx = c.getWidth()/8;
+//                int vy = c.getHeight()/8;
+//                int width = 3*c.getWidth()/4;
+//                int height = 3*c.getHeight()/4;
+//                double d = 255;
+//                
+//                double dx = (0.5*width*s.getX() + n*f.getX()*(vx+0.5*width))*x + (0.5*width*s.getY() + n*f.getY()*(vx+0.5*width))*y + (0.5*width*s.getZ() + n*f.getZ()*(vx+0.5*width))*z - (cx*0.5*width+(vx+0.5*width)*(-cz*n+1))*w;
+//                double dy = (0.5*height*s.getX() + n*f.getX()*(vy+0.5*height))*x + (0.5*height*s.getY() + n*f.getY()*(vy+0.5*height))*y + (0.5*height*s.getZ() + n*f.getZ()*(vy+0.5*height))*z - (cy*0.5*height+(vy+0.5*height)*(-cz*n+1))*w;
+//                double dz = (0.5*d*f.getX()+0.5*d*n*f.getX())*x + (0.5*d*f.getY()+0.5*d*n*f.getY())*y + (0.5*d*f.getZ()+0.5*d*n*f.getZ())*z + (cz*0.5*d + 0.5*d*(-cz*n+1))*w;
+//                double dw = n*(f.getX()*x + f.getY()*y+f.getZ()*z -(cz+1/n)*w);
+                
+                double k = Math.tan(c.getFov()/2);
+                double r = c.getAspectRatio();
+//                double dx = 1/(r*k) * (s.getX()*x + s.getY()*y + s.getZ()*z - cx*w);
+//                double dy = 1/k * (u.getX()*x + u.getY()*y + u.getZ()*z -cy*w);
+//                double dz = far/(far-near)*(f.getX()*x + f.getY()*y + f.getZ()*z) + (-cz*(far/(far-near))+1)*w;
+//                double dw = -(near*far)/(far-near) * (f.getX()*x + f.getY()*y + f.getZ()*z - cz*w);
+                
+                double j = far+near;
+                double h = far-near;
+                double dx = 1/(r*k)*(s.getX()*x + s.getY()*y + s.getZ()*z - cx*w);
+                double dy = 1/k * (u.getX()*x + u.getY()*y + u.getZ()*z -cy*w);
+                double dz = -j/h * (f.getX()*x + f.getY()*y + f.getZ()*z) + (cz*j/h - 2*far*near/h)*w;
+                double dw = -f.getX()*x - f.getY()*y - f.getZ()*z + cz*w;
                 
                 double vecx = dx/dw;
                 double vecy = dy/dw;
@@ -170,50 +215,44 @@ public class PolygonTexture implements Renderable{
                 double viewpointx = 0;
                 double viewpointy = 0;
                 
-                //xpos[i] = (int)((vecx+2)/2*c.getWidth() + viewpointx);
-                //ypos[i] = (int)((1-(vecy+2)/2) * c.getHeight() + viewpointy);
-                xpos[i] = (int)((vecx + 1) * (c.getWidth()/2.0) + viewpointx);
-                ypos[i] = (int)((1-vecy) * (c.getHeight()/2.0) + viewpointy);
+                xpos[i] = (int)((vecx+2)/2*c.getWidth() + viewpointx);
+                ypos[i] = (int)((1-(vecy+2)/2) * c.getHeight() + viewpointy);
+                //xpos[i] = (int)((vecx + 1) * (c.getWidth()/2.0) + viewpointx);
+                //ypos[i] = (int)((vecy + 1) * (c.getHeight()/2.0) + viewpointy);
+                if(i == 0){ zdepth = vecz;}
+                else if(vecz > zdepth){ zdepth = vecz;}
+                else if(vecz < 0){ 
+                    zdepth = vecz;
+                
+                }
             }
         }
-        Polygon tri = new Polygon();
-        tri.addPoint(xpos[0], ypos[0]);
-        tri.addPoint(xpos[1], ypos[1]);
-        tri.addPoint(xpos[2], ypos[2]);
-        
-        Polygon texPoly = new Polygon();
-        texPoly.addPoint((int)this.texturePoints[0].getX(), (int)this.texturePoints[0].getY());
-        texPoly.addPoint((int)this.texturePoints[1].getX(), (int)this.texturePoints[1].getY());
-        texPoly.addPoint((int)this.texturePoints[2].getX(), (int)this.texturePoints[2].getY());
-        Rectangle texRect = texPoly.getBounds();
-        
-        Graphics2D imageGraphics = this.tex.createGraphics();
-        imageGraphics.setClip(texPoly);
-        imageGraphics.clip(texPoly);
-        
-        if(this.drawOutline){
-            g.setColor(Color.black);
-            g.drawPolygon(tri);
+    }
+    
+    @Override
+    public void render(Graphics2D g){
+        if (this.zdepth >= 0) {
+            Polygon tri = new Polygon();
+            tri.addPoint(xpos[0], ypos[0]);
+            tri.addPoint(xpos[1], ypos[1]);
+            tri.addPoint(xpos[2], ypos[2]);
+
+            if (this.drawOutline) {
+                g.setColor(Color.black);
+                g.drawPolygon(tri);
+            }
+
+            Vector2[] newshape = new Vector2[3];
+            for (int i = 0; i < 3; i++) {
+                newshape[i] = new Vector2(xpos[i], ypos[i]);
+            }
+
+            AffineTransform at = createTransform(texturePoints, newshape);
+
+            g.setClip(tri);
+            g.drawImage(tex, at, null);//end step
+            g.setClip(null);
         }
-        
-        Vector2[] newshape = new Vector2[3];
-        for(int i=0; i<3; i++){
-            newshape[i] = new Vector2(xpos[i],ypos[i]);
-        }
-        
-        Rectangle rect = tri.getBounds();
-        TexturePaint texpaint = new TexturePaint(tex, rect);
-        //texpaint.createContext(, rect, rect, null, null)
-        
-        AffineTransform at = createTransform(texturePoints,newshape);
-        //g.setPaint(texpaint);
-        //g.fill(tri);
-        //AffineTransform at = new AffineTransform();
-        //at.translate(rect.x, rect.y);
-        //at.scale(rect.width*1.0/texRect.width, rect.height*1.0/texRect.height);
-        //at.concatenate(createTransform(texturePoints,newshape));
-        //at.shear(-4e-5, 0);
-        g.drawImage(tex, at, null);//end step
     }
     
     public void setOutline(boolean tf){
@@ -283,13 +322,8 @@ public class PolygonTexture implements Renderable{
     }
 
     @Override
-    public double distance(Vector3 v) {
-        double d = 0;
-        for(int i=0; i<3; i++){
-            double dist = v.distanceSquare(this.worldPoints[i]);
-            if(dist > 0) d = dist;
-        }
-        return d;
+    public double zdepth() {
+        return zdepth;
     }
 
 }

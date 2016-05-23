@@ -13,6 +13,7 @@ import java.awt.Graphics2D;
  * @author Nekel
  */
 public interface Renderable {
-    public void render(Graphics2D g, Camera c);
-    public double distance(Vector3 v);
+    public void prerender(Camera c);
+    public void render(Graphics2D g);
+    public double zdepth();
 }

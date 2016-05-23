@@ -39,10 +39,10 @@ public class Example3DGame extends Game3D{
         Vector3 v3URR = new Vector3(0.5, 0.5, -0.5);
         Vector3 v3LLR = new Vector3(-0.5, -0.5, -0.5);
         Vector3 v3LRR = new Vector3(0.5, -0.5, -0.5);
-        Vector3 v3ULF = new Vector3(-0.5, 0.5, -0.5);
-        Vector3 v3URF = new Vector3(0.5, 0.5, -0.5);
-        Vector3 v3LLF = new Vector3(-0.5, -0.5, -0.5);
-        Vector3 v3LRF = new Vector3(0.5, -0.5, -0.5);
+        Vector3 v3ULF = new Vector3(-0.5, 0.5, 0.5);
+        Vector3 v3URF = new Vector3(0.5, 0.5, 0.5);
+        Vector3 v3LLF = new Vector3(-0.5, -0.5, 0.5);
+        Vector3 v3LRF = new Vector3(0.5, -0.5, 0.5);
         Vector3 v3ULS = new Vector3(-0.5, 0.5, -0.5);
         Vector3 v3URS = new Vector3(-0.5, 0.5, 0.5);
         Vector3 v3LLS = new Vector3(-0.5, -0.5, -0.5);
@@ -53,23 +53,23 @@ public class Example3DGame extends Game3D{
         Vector2 v2UR = new Vector2(1, 1);
         Vector2 v2LL = new Vector2(0, 0);
         Vector2 v2LR = new Vector2(1, 0);
-        pt1 = new PolygonTexture("Sprites/bluewall.png", new Vector2[]{v2UL.clone(), v2LL.clone(), v2UR.clone()},
-                new Vector3[]{v3ULR, v3LLR, v3URR});
-        pt1.setOutline(true);
-        pt2 = new PolygonTexture("Sprites/redbrick.png", new Vector2[]{v2LL.clone(), v2UR.clone(), v2LR.clone()},
-                new Vector3[]{v3LLR, v3URR, v3LRR});
-        pt2.setOutline(true);
-        pt3 = new PolygonTexture("Sprites/bluewall.png", new Vector2[]{v2UL.clone(), v2LL.clone(), v2UR.clone()},
+        pt1 = new PolygonTexture("Sprites/redbrick.png", new Vector2[]{v2UL.clone(), v2LL.clone(), v2UR.clone()},
                 new Vector3[]{v3ULF, v3LLF, v3URF});
-        pt3.setOutline(true);
-        pt4 = new PolygonTexture("Sprites/redbrick.png", new Vector2[]{v2LL.clone(), v2UR.clone(), v2LR.clone()},
-                new Vector3[]{v3LLF, v3URF, v3LRF});
-        pt4.setOutline(true);
+        pt1.setOutline(true);
+        pt2 = new PolygonTexture("Sprites/redbrick.png", new Vector2[]{v2LL.clone(), v2LR.clone(), v2UR.clone()},
+                new Vector3[]{v3LLF, new Vector3(.5,-.5,.5),new Vector3(.5,.5,.5)});
+        pt2.setOutline(true);
+//        pt3 = new PolygonTexture("Sprites/redbrick.png", new Vector2[]{v2UL.clone(), v2LL.clone(), v2UR.clone()},
+//                new Vector3[]{v3ULF, v3LLF, v3URF});
+//        pt3.setOutline(true);
+//        pt4 = new PolygonTexture("Sprites/redbrick.png", new Vector2[]{v2LL.clone(), v2UR.clone(), v2LR.clone()},
+//                new Vector3[]{v3LLF, v3URF, v3LRF});
+//        pt4.setOutline(true);
         pt5 = new PolygonTexture("Sprites/bluewall.png", new Vector2[]{v2UL.clone(), v2LL.clone(), v2UR.clone()},
-                new Vector3[]{v3ULS, v3LLS, v3URS});
+                new Vector3[]{new Vector3(.5,.5,.5), new Vector3(.5,-.5,.5), new Vector3(.5,.5,-.5)});
         pt5.setOutline(true);
-        pt6 = new PolygonTexture("Sprites/redbrick.png", new Vector2[]{v2LL.clone(), v2UR.clone(), v2LR.clone()},
-                new Vector3[]{v3LLS, v3URS, v3LRS});
+        pt6 = new PolygonTexture("Sprites/bluewall.png", new Vector2[]{v2LL.clone(), v2LR.clone(), v2UR.clone()},
+                new Vector3[]{new Vector3(.5,-.5,.5), new Vector3(.5,-.5,-.5), new Vector3(.5,.5,-.5)});
         pt6.setOutline(true);
     }
     
@@ -77,8 +77,8 @@ public class Example3DGame extends Game3D{
     public void Render(Graphics2D g, SceneBatch batch) {
         batch.renderPolygon(pt1);
         batch.renderPolygon(pt2);
-        batch.renderPolygon(pt3);
-        batch.renderPolygon(pt4);
+        //batch.renderPolygon(pt3);
+        //batch.renderPolygon(pt4);
         batch.renderPolygon(pt5);
         batch.renderPolygon(pt6);
     }

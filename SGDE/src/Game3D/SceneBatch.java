@@ -24,9 +24,12 @@ public class SceneBatch {
     }
     
     public void render(Graphics2D g, Camera c){
+        for(Node n : batch){
+            n.prerender(c);
+        }
         Collections.sort(batch);
         for(Node n : batch){
-            n.render(g, c);
+            n.render(g);
         }
         batch.clear();
     }
@@ -42,15 +45,18 @@ public class SceneBatch {
             this.r = r;
             this.v = v;
         }
-        public void render(Graphics2D g, Camera c){
-            this.r.render(g, c);
+        public void prerender(Camera c){
+            this.r.prerender(c);
+        }
+        public void render(Graphics2D g){
+            this.r.render(g);
         }
 
         @Override
         public int compareTo(Object o) {
             Node other = (Node)o;
-            double thisd = this.r.distance(v);
-            double otherd = other.r.distance(v);
+            double thisd = this.r.zdepth();
+            double otherd = other.r.zdepth();
             if(thisd < otherd){
                 return -1;
             }else if(thisd == otherd){

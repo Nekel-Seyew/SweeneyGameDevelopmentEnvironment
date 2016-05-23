@@ -20,6 +20,8 @@ public class Camera {
     double fov;
     double fovd;
     int screenSizeX, screenSizeY;
+    double near, far;
+    double aspectRatio;
     
     public enum projection{
         perspective,
@@ -36,6 +38,9 @@ public class Camera {
         this.screenSizeX = height;
         this.screenSizeY = width;
         this.currentProjection = projection.perspective;
+        this.aspectRatio = (width*1.0)/height;
+        near = 0.01;
+        far = 1000;
         
         this.up.normalize();
         this.forward.normalize();
@@ -142,4 +147,51 @@ public class Camera {
     public int getHeight(){
         return this.screenSizeY;
     }
+
+    public double getFov() {
+        return fov;
+    }
+
+    public void setFov(double fov) {
+        this.fov = fov;
+    }
+
+    public int getScreenSizeX() {
+        return screenSizeX;
+    }
+
+    public void setScreenSizeX(int screenSizeX) {
+        this.screenSizeX = screenSizeX;
+        this.aspectRatio = screenSizeX/screenSizeY;
+    }
+
+    public int getScreenSizeY() {
+        return screenSizeY;
+    }
+
+    public void setScreenSizeY(int screenSizeY) {
+        this.screenSizeY = screenSizeY;
+        this.aspectRatio = screenSizeX/screenSizeY;
+    }
+
+    public double getNear() {
+        return near;
+    }
+
+    public void setNear(double near) {
+        this.near = near;
+    }
+
+    public double getFar() {
+        return far;
+    }
+
+    public void setFar(double far) {
+        this.far = far;
+    }
+
+    public double getAspectRatio() {
+        return aspectRatio;
+    }
+    
 }
